@@ -14,6 +14,6 @@ Tutorial.html is my attempt at documentation. Userguide.md is the contents of th
 
 The images folder contains the site images plus the tutorial images in the help folder.
 
-The saved files folders is just a local backup . . .
+The saved files folders is just a local backup . . .       
 
 
