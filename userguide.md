@@ -6,7 +6,7 @@ The entire website is contained in a single web page - index.html. The core code
 The web page, like all web pages is written in the HTML markup language.  
 HTML is simple once you study it a little.
 
-For a good introduction see see this on w3schools: [HTML introduction](https://www.w3schools.com/html/html_intro.asp)
+For a good introduction see see this on w3schools: [W3schools HTML introduction](https://www.w3schools.com/html/html_intro.asp)
 
 The best way to follow this tutorial is by having the site displayed in another browser tab. Seeing the code and the web pages makes things clearer. Also study the website.html file starting at the body tag.
 

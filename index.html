@@ -8,26 +8,27 @@ The site is ment to be maintained you - the user - with minimal learning.
 
 Study the tutorial.html page as well as the comments - green text - in this file.
 
-Studying this file and having this file and help.html open in a browser should make
+Studying this file and having this file and tutorial.html open in a browser should make
 things clearer and Dad is always available for a tutorial session.
 -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- The meta tags define some site attributes.
+    <!-- The meta tags define some site attributes. -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- This text appears in the browser tab of the site. Feel free to change it. -->
     <title>Sharla Dawn Poet</title>
 
-    <!-- This link loads the site's main styling library of styles. -->
+    <!-- This link loads the site's main styling library of styles. The Bootstrap styling framework-->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     
     <!-- This begins the page style customization. Best to ask Gemini about style changes . . . -->
     <style>
-        /* CLEAN TYPOGRAPHY: Playfair for headings, Inter for body */
+        /* CLEAN TYPOGRAPHY: Playfair for headings, Inter for body  from Google styling libraries.*/
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600&display=swap');
+        
         :root {
             --serif: 'Playfair Display', serif; 
             --sans: 'Inter', sans-serif;
@@ -146,18 +147,59 @@ things clearer and Dad is always available for a tutorial session.
             content: "";
             clear: both;
             display: table;
+        }
+       .altcover{
+            display: none;
+            position: absolute;
+            left: 60%;
+            top: 25%;
+            width: 15%;
+            height: auto;
+            z-index: 10000;
+        }
+        
+        /* MOBILE ONLY REFINEMENTS */
+        @media (max-width: 991px) {
+            /* Make the menu links larger and easier to tap */
+            .navbar-nav .nav-link {
+                font-size: 1rem !important; 
+                padding: 15px 0 !important;
+                border-bottom: 1px solid #eee; /* Adds a clean divider between links */
+            }
+
+            /* Prevent overlap: Force the menu to push content down rather than float over it */
+            .navbar-collapse {
+                background-color: var(--bg-stone);
+                padding: 20px;
+                position: relative;
+                z-index: 1000;
+                border-bottom: 2px solid #e7e5e4;
+            }
+            
+            /* Ensure the dropdown items are also readable */
+            .dropdown-menu {
+                border: none;
+                padding-left: 20px;
+                background-color: transparent;
+            }
+        }  
+        .navbar-toggler {
+            padding: 0; /* Removes the boxy outline */
+        }
+        .navbar-toggler-icon {
+            width: 1.2em; /* Slightly smaller and more elegant */
         }        
+         
     </style>
     <!-- This Javascript displays the individual pages 
             when  their menu buttons are clicked.
             Do not alter it.
             
             The code "function showPage(pageId)" is called from the
-            buttons in the menu bar and displays the page name passed
+            buttons in the menu bar and displays the page whose id is passed
             to the "pageid" variable.
             
-            So showPage('home') in the menu calls the function asking it to 
-            
+            So showPage('home') in the menu calls the function asking it to display the pahr with the id "home."
     -->        
     <script>
         function showPage(pageId) {
@@ -174,13 +216,47 @@ things clearer and Dad is always available for a tutorial session.
             }
         }
         
+        /*
+            This toggles the "See alternate cover" image in the
+            AWS section of the LPS publications page by toggeling
+            it's visibility.
+        */
         function toggleCover(event)
         {
             event.stopPropagation()
-            $('#altcover').toggle()
+            $('.altcover').toggle()
 
         }        
         window.onload = function() { showPage('home'); }; <!-- Display the home page when the loading is done -->
+        
+        // This tells the mobile menu to close itself after a link is clicked
+        document.querySelectorAll('.nav-link, .dropdown-item').forEach(link => {
+            link.addEventListener('click', () => {
+                const menu = document.getElementById('navMenu');
+                const bsCollapse = bootstrap.Collapse.getInstance(menu);
+                if (bsCollapse) {
+                    bsCollapse.hide();
+                }
+            });
+        });      
+
+        //This code handles the collapsing of the menues on mobile devices.
+        document.addEventListener('click', function (event) {
+            const menu = document.getElementById('navMenu');
+            
+            // 1. Is the mobile menu actually open?
+            const isMobileMenuOpen = menu.classList.contains('show');
+            
+            // 2. Did we click a final link (not a parent dropdown)?
+            const isNavLink = event.target.classList.contains('nav-link') || event.target.classList.contains('dropdown-item');
+            const isDropdownToggle = event.target.classList.contains('dropdown-toggle');
+
+            // ONLY close if it's a link AND it's not the parent dropdown button
+            if (isMobileMenuOpen && isNavLink && !isDropdownToggle) {
+                const bsCollapse = bootstrap.Collapse.getInstance(menu) || new bootstrap.Collapse(menu);
+                bsCollapse.hide();
+            }
+        });
     </script>
 </head>
 
@@ -193,14 +269,22 @@ things clearer and Dad is always available for a tutorial session.
                 <img src="./images/smallflower.png">
                 Sharla Dawn Poet
             </a>
+            <!--This button it the "hamburger" button that appears on mobile devices.
+                   When clicked, the menu selection buttons appear.
+            -->
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-controls="navMenu" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
             
-            <div class="collapse navbar-collapse justify-content-end">
+            <div class="collapse navbar-collapse justify-content-end" id="navMenu">
                 <ul class="navbar-nav gap-4">
                     <li class="nav-item"><a class="nav-link" onclick="showPage('home')">home</a></li>
                     <li class="nav-item"><a class="nav-link" onclick="showPage('about')">about</a></li>
                     
+                    <!--This "list item" "<li>" tag contains the poems menu items. -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#">poems</a>
+                        <a class="nav-link dropdown-toggle" href="#">poems</a> <!--This is the poems button-->
+                        <!--The <ul> tag begins an "unordered list of <i>s that are the poem links-->
                         <ul class="dropdown-menu">
                             <!-- These <li> - list item - tags are the drop downs you see on screen.
                                     If you add a new poem you need to add one of these after you add
@@ -211,8 +295,9 @@ things clearer and Dad is always available for a tutorial session.
                             <li><a class="dropdown-item py-2" onclick="showPage('steinway')">The Woman at the Steinway</a></li>
                             <li><a class="dropdown-item py-2" onclick="showPage('flush')">Sample Flush Left Poem</a></li>
                         </ul>
-                    </li>
+                    </li> <!--End of the poems items-->
 
+                    <!--This dropdown displays the books links-->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#">books</a>
                         <ul class="dropdown-menu">
@@ -220,7 +305,7 @@ things clearer and Dad is always available for a tutorial session.
                         </ul>
                     </li>
 
-
+                    <!--This group is the LPS dropdown-->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#">the live poets society</a>
                         <ul class="dropdown-menu">
@@ -229,35 +314,46 @@ things clearer and Dad is always available for a tutorial session.
                             <li><a class="dropdown-item py-2" onclick="showPage('lpscontact')">Contact</a></li>
                         </ul>
                     </li>
+                    
+                    <!--This single <li> is the link to the contact page.-->
                     <li class="nav-item"><a class="nav-link" onclick="showPage('contact')">contact</a></li>
                     
-                </ul>
+                </ul> <!--This ends the menu items list--> 
             </div>
         </div>
-    </nav>
-    <!-- End of the navigation bar -->
+    </nav> <!-- End of the navigation bar -->
     
     <!-- 
         This is the beginning of the main content.
         The content is divided into a series of HTML <section></section> tags.
         A section is a simple container that isolates its contents.
-    
+        
+        The <main>tag wraps the entire visible content. An </main> tag is at the end.
+        The "container" class is the Bootstrap styling framework style for the grid of rows and columns
+        in your content.
     -->
     <main class="container">
         
         <!-- This is the home page.  Note: Every page is wrapped in a <section></section> tag.-->
         <section id="home" class="page">
+            <!---->
+            <!--Start a grid row-->
             <div class="row align-items-center py-2">
+                <!--Add 6 unit column - the left side of the page.-->
                 <div class="col-md-6 order-1 order-md-1">
+                    <!--Insert an image as the left side coontent-->
                     <img src="./images/Website_Name_Plate.jpg">
-                </div>
+                </div><!--End of the left side-->
+                <!--Add another column - the right side-->
                 <div class="col-md-6 order-2 order-md-2 mb-5 mb-md-0 text-center">
+                    <!--Wrap the right side image in a styled box-->
                     <div class="img-box mx-auto shadow-sm" style="max-width: 400px; aspect-ratio: 4/5;">
+                        <!--Insert the right side image of Sharla-->
                         <img src="./images/sharla-1-5-26.jpg">
                     </div>
-                </div>
-            </div>
-        </section>
+                </div><!--End of the right side-->
+            </div><!--End of the row-->
+        </section><!--End of the home page section-->
 
         <!-- This is the about page -->
         <section id="about" class="page">
@@ -580,6 +676,9 @@ things clearer and Dad is always available for a tutorial session.
 
         <!-- This is the LPS publications page -->
         <section id="lpspublications" class="page">
+            <!--This image is an alternate to the AQWS cover image below that the owner considers better. 
+                   It toggles when the "See Alternate Cover" button below is clicked is clicked -->
+            <img src="./images/AQWS Girl Cover small.jpg" class="small-jpg altcover" onclick="toggleCover(event)">
             <div class="scroll-container">
                 <div class="editorial-container clearfix">
                     
@@ -593,6 +692,7 @@ things clearer and Dad is always available for a tutorial session.
                     One special element of the Live Poets’ group process is its communication model.  We call it “give-and-take.”  Key aspects of the “give-and-take” communication model are evident in the ways in which A Quiet Wind Speaks came into being.</p>
                     <p>  
                     Consensus played a large part in this book’s formation.  In our work, we have consistently valued one another’s spirit of collaboration as we discussed issues based on their merits, not on the basis of which person brought the idea to the group.  During meetings, the whole group participated in every phase of the book, from defining content to choosing the cover design.
+                    <!--This button toggles the alternate cover image above when clicked/-->
                     <button class="btn btn-sm btn-link"  onclick="toggleCover(event)" >See Alternate Cover</button>
                     </p>
                     <p>  
@@ -710,5 +810,6 @@ things clearer and Dad is always available for a tutorial session.
     
     <!-- Load the Bootstrap CSS Framework's Javascript Elements -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </body>
 </html>            
